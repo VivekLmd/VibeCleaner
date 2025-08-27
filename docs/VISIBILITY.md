@@ -27,6 +27,14 @@ Events are appended to `events.jsonl` with fields such as `event`, `ts`, `provid
   - Specific run id: `vibeops report --run <id>`
   - Custom output path: `vibeops report --run <id> --out /path/to/report.html`
 
+### Bundle Multiple Reports
+- Build an index and per-run reports under `./reports/` for publishing:
+  - Latest N runs: `vibeops reports-bundle --latest-count 5`
+  - Specific runs: `vibeops reports-bundle --runs id1,id2,id3 --out reports`
+
+To publish on GitHub Pages:
+- Commit the `reports/` directory and enable Pages for your repo (e.g., deploy from `docs/` or `gh-pages` branch). You can rename `reports/` to `docs/` if using the main branch Pages source.
+
 ## OpenTelemetry Export (optional)
 - Export a run as a trace to an OTLP collector (respects `OTEL_EXPORTER_OTLP_*` env):
   - Install deps: `pip install opentelemetry-sdk opentelemetry-exporter-otlp`

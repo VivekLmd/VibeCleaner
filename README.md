@@ -28,6 +28,9 @@ Pin project versions in `config/constraints-*.txt`; the prompt builder injects t
 
 Visibility and reports: see `docs/VISIBILITY.md` for tracing, HTML reports, and optional OpenTelemetry export.
 
+## License
+- Licensed under the MIT License. See the `LICENSE` file for details. The software is provided “AS IS”, without warranty of any kind.
+
 Notes:
 - State is stored under your user config dir (e.g., `~/.config/vibeops` on Linux/macOS, `%APPDATA%\vibeops` on Windows).
 - Set `VIBEOPS_PROVIDER_TIMEOUT` (seconds) to cap provider CLI runtime.
