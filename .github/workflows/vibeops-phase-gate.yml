@@ -27,7 +27,7 @@ jobs:
         run: |
           set -euo pipefail
           # Expected label to allow apply actions
-          APPROVAL_LABEL="allow-apply"
+          APPROVAL_LABEL="approved"
           # Check if label is attached
           has_label=$(jq -r '.pull_request.labels[].name' "$GITHUB_EVENT_PATH" | grep -Fx "$APPROVAL_LABEL" || true)
           if [ -n "$has_label" ]; then
