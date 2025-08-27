@@ -1,0 +1,4 @@
+# Pin Node/npm package versions here (no upgrades unless ADR)
+# react@18.2.0
+# next@14.2.3
+# eslint@8.57.0

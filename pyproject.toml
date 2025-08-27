@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vibeops"
+version = "0.1.0"
+description = "Practical vibe coding orchestration for Claude + Codex"
+requires-python = ">=3.9"
+readme = "README.md"
+dependencies = [
+  "PyYAML>=6.0",
+  "platformdirs>=4",
+]
+
+[project.scripts]
+vibeops = "vibeops.cli:main"

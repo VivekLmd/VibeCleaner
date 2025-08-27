@@ -1,0 +1,5 @@
+defaults:
+  discovery: claude
+  design: claude
+  mvp: codex
+  production: claude

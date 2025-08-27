@@ -1,0 +1,54 @@
+# Simple backlog format: epics with nested issues
+repo: ""   # e.g., owner/repo
+project: ""  # optional GitHub project name/URL
+labels_default: ["ai-generated", "vibeops"]
+epics:
+  - key: DISC
+    title: "Discovery: Feasibility of Core Tech"
+    description: "Run spikes to determine limits of key techniques and 3rd-party tools."
+    labels: ["phase:discovery"]
+    issues:
+      - title: "Spike: OCR latency and accuracy under 100 sample docs"
+        body: |
+          **Goal**: measure accuracy/latency; identify blockers.
+          **Deliverables**: DISCOVERY.md section with metrics, risks, go/no-go notes.
+        labels: ["area:ocr"]
+        assignees: []
+        mode: discovery
+      - title: "Spike: Vector search recall@k for domain corpus"
+        body: |
+          **Goal**: validate recall@k on 10K docs; test hybrid BM25+DPR.
+          **Deliverables**: dataset notes, scripts, metrics table.
+        labels: ["area:retrieval"]
+        assignees: []
+        mode: discovery
+  - key: DSGN
+    title: "Design: POC application"
+    description: "Demonstrate potential with a runnable app; outline business engine components."
+    labels: ["phase:design"]
+    issues:
+      - title: "POC app skeleton + README"
+        body: |
+          Create runnable POC with minimal UI; document decisions in DESIGN.md.
+        labels: ["area:app"]
+        mode: design
+  - key: MVP
+    title: "MVP: 2–10 use cases wired E2E"
+    description: "Focus on core business logic; not production hardening."
+    labels: ["phase:mvp"]
+    issues:
+      - title: "Implement Use Case #1 end-to-end"
+        body: |
+          Minimal vertical slice; include basic test and demo script.
+        labels: ["area:uc1"]
+        mode: mvp
+  - key: PROD
+    title: "Production hardening"
+    description: "Reliability, security, performance, observability, docs."
+    labels: ["phase:production"]
+    issues:
+      - title: "Add structured logging + metrics"
+        body: |
+          Adopt structured logs; add counters/histograms; dashboards.
+        labels: ["area:observability"]
+        mode: production

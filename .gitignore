@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.venv/
+venv/
+
+# Packaging
+build/
+dist/
+*.egg-info/
+
+# Node
+node_modules/
+
+# Editors
+.DS_Store
+.idea/
+.vscode/
+
+# Generated
+generated/
+reports/

@@ -1,0 +1,4 @@
+# Pin project-approved versions here (no upgrades unless ADR)
+# fastapi==0.110.0
+# pydantic==2.7.1
+# numpy==1.26.4

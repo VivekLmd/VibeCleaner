@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+echo "[pre-commit] Running swachh checks..."
+python -m vibeops.swachh || (echo "Fix issues before commit." && exit 1)
