@@ -9,6 +9,7 @@ Agentic tooling can be powerful but risky. Keep these cautions in mind:
 - Context leakage: tracing stores prompts and responses locally; treat artifacts as sensitive.
 
 ### Built-in Mitigations
+- Dry-run by default: commands only print intended actions unless `--apply` is set.
 - Safe mode: add `--safe` (or `VIBEOPS_SAFE=1`) to enforce guardrails:
   - Forces dry-run for `issues` and skips `labels` changes.
   - Blocks writing generated output into non-empty directories unless `--force` is passed.

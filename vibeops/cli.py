@@ -61,18 +61,23 @@ def cmd_gen(args):
     provider_name = args.provider or _choose_provider(args.mode, BASE / "config" / "router.yaml")
     out = getattr(providers, provider_name)(prompt, model=args.model)
     out_dir = Path(args.out)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    # Safe mode: block writing into a non-empty directory unless --force
-    if os.environ.get("VIBEOPS_SAFE"):
-        try:
-            any_existing = any(out_dir.iterdir())
-        except Exception:
-            any_existing = False
-        if any_existing and not getattr(args, "force", False):
-            raise SystemExit("Safe mode: refusing to write into a non-empty output directory. Use --force or disable --safe.")
-    (out_dir / "GENERATED.md").write_text(out, encoding="utf-8")
-    print(f"Generated output saved to {args.out}/GENERATED.md")
-    telemetry.log_event("artifact_saved", path=f"{args.out}/GENERATED.md")
+    if os.environ.get("VIBEOPS_APPLY"):
+        out_dir.mkdir(parents=True, exist_ok=True)
+        # Safe mode: block writing into a non-empty directory unless --force
+        if os.environ.get("VIBEOPS_SAFE"):
+            try:
+                any_existing = any(out_dir.iterdir())
+            except Exception:
+                any_existing = False
+            if any_existing and not getattr(args, "force", False):
+                raise SystemExit("Safe mode: refusing to write into a non-empty output directory. Use --force or disable --safe.")
+        (out_dir / "GENERATED.md").write_text(out, encoding="utf-8")
+        print(f"Generated output saved to {args.out}/GENERATED.md")
+        telemetry.log_event("artifact_saved", path=f"{args.out}/GENERATED.md")
+    else:
+        preview = (out[:500] + ("..." if len(out) > 500 else ""))
+        print("[dryrun][gen] Would write to:", (out_dir / "GENERATED.md").as_posix())
+        print("[dryrun][gen] Preview:\n" + preview)
     telemetry.end_run(status="ok")
 
 def cmd_review(args):
@@ -98,9 +103,6 @@ def cmd_swachh(args):
 from .gh_issues import ensure_labels, create_issue
 
 def cmd_labels(args):
-    if os.environ.get("VIBEOPS_SAFE"):
-        print("[labels] Safe mode enabled: skipping label creation.")
-        return
     try:
         import yaml
     except ImportError:
@@ -117,6 +119,9 @@ def cmd_labels(args):
             for l in issue.get("labels",[]): all_labels.add(l)
             mode = issue.get("mode")
             if mode: all_labels.add(f"mode:{mode}")
+    if os.environ.get("VIBEOPS_SAFE") or not os.environ.get("VIBEOPS_APPLY"):
+        print(f"[dryrun][labels] Would ensure labels in {repo}: {sorted(all_labels)}")
+        return
     ensure_labels(repo, sorted(all_labels))
     print("[labels] done.")
 
@@ -128,9 +133,11 @@ def _issue_body_from(epic, issue):
     return header + (issue.get("body","") or "")
 
 def cmd_issues(args):
-    # Force dryrun under safe mode
+    # Default dry-run; enable apply via global or local flag
     if os.environ.get("VIBEOPS_SAFE"):
         args.dryrun = True
+    if os.environ.get("VIBEOPS_APPLY"):
+        args.dryrun = False
     try:
         import yaml
     except ImportError:
@@ -210,6 +217,7 @@ def main(argv=None):
     p = argparse.ArgumentParser("vibeops", description="Vibe coding orchestrator for Claude + Codex")
     p.add_argument("--trace", action="store_true", help="Enable visibility trail for this run")
     p.add_argument("--safe", action="store_true", help="Enable safety guardrails (dry-run where possible; block risky writes)")
+    p.add_argument("--apply", action="store_true", help="Apply changes (by default, commands run in dry-run mode). Shows a caution warning.")
     sub = p.add_subparsers(dest="cmd")
 
     sp = sub.add_parser("init", help="Initialize state and detect tools")
@@ -273,6 +281,11 @@ def main(argv=None):
         os.environ["VIBEOPS_TRACE"] = "1"
     if getattr(args, "safe", False):
         os.environ["VIBEOPS_SAFE"] = "1"
+    # Apply mode is opt-in; default is dry-run
+    if getattr(args, "apply", False):
+        os.environ["VIBEOPS_APPLY"] = "1"
+        print("CAUTION: APPLY MODE ENABLED. This will perform write/external actions.")
+        print("Proceeding in 3... 2... 1...")
     if not hasattr(args, "func"):
         p.print_help()
         return 2

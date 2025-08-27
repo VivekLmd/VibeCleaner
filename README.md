@@ -28,7 +28,9 @@ Pin project versions in `config/constraints-*.txt`; the prompt builder injects t
 
 Visibility and reports: see `docs/VISIBILITY.md` for tracing, HTML reports, and optional OpenTelemetry export.
 
-Operational cautions and safe-use guidelines: see `docs/CAUTIONS.md`. Use `--safe` to enable guardrails.
+Operational cautions and safe-use guidelines: see `docs/CAUTIONS.md`.
+
+By default, VibeOps runs in dry-run mode and will not perform external or destructive actions. Use `--apply` to opt in, and consider `--safe` for extra guardrails.
 
 ## License
 - Licensed under the MIT License. See the `LICENSE` file for details. The software is provided “AS IS”, without warranty of any kind.
