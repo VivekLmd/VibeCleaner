@@ -58,3 +58,9 @@ def codex(prompt: str, model: str | None = None) -> str:
         hint = "Install the Codex CLI or set VIBEOPS_CODEX_CMD to your binary."
         raise ProviderError(f"Codex CLI failed: {err.strip()}\n{hint}")
     return out
+
+def mock(prompt: str, model: str | None = None) -> str:
+    """Mock provider for tests/CI: echoes metadata and a truncated prompt digest."""
+    size = len(prompt)
+    head = prompt[:200]
+    return f"[MOCK PROVIDER]\nmodel={model or 'n/a'}\nbytes={size}\nhead=\n{head}"

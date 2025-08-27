@@ -227,7 +227,7 @@ def main(argv=None):
     sp = sub.add_parser("plan", help="Ask for plan/design before coding")
     sp.add_argument("--ticket", required=True, help="Path to a ticket markdown/text")
     sp.add_argument("--mode", choices=["discovery", "design", "mvp", "production"], default="design")
-    sp.add_argument("--provider", choices=["claude", "codex"])
+    sp.add_argument("--provider", choices=["claude", "codex", "mock"])
     sp.add_argument("--model", help="Optional provider model name")
     sp.set_defaults(func=cmd_plan)
 
@@ -236,14 +236,14 @@ def main(argv=None):
     sp.add_argument("--mode", choices=["discovery", "design", "mvp", "production"], default="mvp")
     sp.add_argument("--out", default="generated")
     sp.add_argument("--force", action="store_true", help="Allow writing into a non-empty output directory")
-    sp.add_argument("--provider", choices=["claude", "codex"])
+    sp.add_argument("--provider", choices=["claude", "codex", "mock"])
     sp.add_argument("--model", help="Optional provider model name")
     sp.set_defaults(func=cmd_gen)
 
     sp = sub.add_parser("review", help="Run model-based review over generated files")
     sp.add_argument("--in", dest="in_path", required=True)
     sp.add_argument("--mode", choices=["discovery", "design", "mvp", "production"], default="production")
-    sp.add_argument("--provider", choices=["claude", "codex"])
+    sp.add_argument("--provider", choices=["claude", "codex", "mock"])
     sp.add_argument("--model", help="Optional provider model name")
     sp.set_defaults(func=cmd_review)
 
