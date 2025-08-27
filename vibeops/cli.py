@@ -60,8 +60,17 @@ def cmd_gen(args):
     prompt = build_prompt(BASE, args.mode, ticket, {"phase": "gen", "out_dir": args.out})
     provider_name = args.provider or _choose_provider(args.mode, BASE / "config" / "router.yaml")
     out = getattr(providers, provider_name)(prompt, model=args.model)
-    Path(args.out).mkdir(parents=True, exist_ok=True)
-    (Path(args.out) / "GENERATED.md").write_text(out, encoding="utf-8")
+    out_dir = Path(args.out)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    # Safe mode: block writing into a non-empty directory unless --force
+    if os.environ.get("VIBEOPS_SAFE"):
+        try:
+            any_existing = any(out_dir.iterdir())
+        except Exception:
+            any_existing = False
+        if any_existing and not getattr(args, "force", False):
+            raise SystemExit("Safe mode: refusing to write into a non-empty output directory. Use --force or disable --safe.")
+    (out_dir / "GENERATED.md").write_text(out, encoding="utf-8")
     print(f"Generated output saved to {args.out}/GENERATED.md")
     telemetry.log_event("artifact_saved", path=f"{args.out}/GENERATED.md")
     telemetry.end_run(status="ok")
@@ -89,6 +98,9 @@ def cmd_swachh(args):
 from .gh_issues import ensure_labels, create_issue
 
 def cmd_labels(args):
+    if os.environ.get("VIBEOPS_SAFE"):
+        print("[labels] Safe mode enabled: skipping label creation.")
+        return
     try:
         import yaml
     except ImportError:
@@ -116,6 +128,9 @@ def _issue_body_from(epic, issue):
     return header + (issue.get("body","") or "")
 
 def cmd_issues(args):
+    # Force dryrun under safe mode
+    if os.environ.get("VIBEOPS_SAFE"):
+        args.dryrun = True
     try:
         import yaml
     except ImportError:
@@ -194,6 +209,7 @@ def cmd_reports_bundle(args):
 def main(argv=None):
     p = argparse.ArgumentParser("vibeops", description="Vibe coding orchestrator for Claude + Codex")
     p.add_argument("--trace", action="store_true", help="Enable visibility trail for this run")
+    p.add_argument("--safe", action="store_true", help="Enable safety guardrails (dry-run where possible; block risky writes)")
     sub = p.add_subparsers(dest="cmd")
 
     sp = sub.add_parser("init", help="Initialize state and detect tools")
@@ -210,6 +226,7 @@ def main(argv=None):
     sp.add_argument("--ticket", required=True)
     sp.add_argument("--mode", choices=["discovery", "design", "mvp", "production"], default="mvp")
     sp.add_argument("--out", default="generated")
+    sp.add_argument("--force", action="store_true", help="Allow writing into a non-empty output directory")
     sp.add_argument("--provider", choices=["claude", "codex"])
     sp.add_argument("--model", help="Optional provider model name")
     sp.set_defaults(func=cmd_gen)
@@ -254,6 +271,8 @@ def main(argv=None):
     args = p.parse_args(argv)
     if getattr(args, "trace", False):
         os.environ["VIBEOPS_TRACE"] = "1"
+    if getattr(args, "safe", False):
+        os.environ["VIBEOPS_SAFE"] = "1"
     if not hasattr(args, "func"):
         p.print_help()
         return 2
