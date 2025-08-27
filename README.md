@@ -32,6 +32,8 @@ Operational cautions and safe-use guidelines: see `docs/CAUTIONS.md`.
 
 By default, VibeOps runs in dry-run mode and will not perform external or destructive actions. Use `--apply` to opt in, and consider `--safe` for extra guardrails.
 
+CI safeguard: PRs that add `--apply` usage must include the `allow-apply` label or the phase-gate workflow will fail.
+
 ## License
 - Licensed under the MIT License. See the `LICENSE` file for details. The software is provided “AS IS”, without warranty of any kind.
 

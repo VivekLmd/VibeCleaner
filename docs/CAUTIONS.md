@@ -23,4 +23,5 @@ Agentic tooling can be powerful but risky. Keep these cautions in mind:
 - Review diffs carefully; keep PRs small and reversible.
 - Run locally and in CI before merging; expand tests as you go.
 - Gate external actions (labels/issues) behind team approval in CI if needed.
+- CI policy: this repo’s workflow blocks PRs that introduce `--apply` usage unless the PR has the `allow-apply` label. Use that label after review to permit apply mode in CI contexts.
 - Rotate credentials if any accidental exposure is suspected.

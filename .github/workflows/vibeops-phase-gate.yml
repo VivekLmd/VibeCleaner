@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
@@ -21,3 +23,33 @@ jobs:
           set -e
           pr_body="$(jq -r .pull_request.body "$GITHUB_EVENT_PATH")"
           echo "$pr_body" | grep -E "Mode: \((discovery|design|mvp|production)\)" >/dev/null || (echo "PR is missing Mode in template" && exit 1)
+      - name: Guard apply mode without approval label
+        run: |
+          set -euo pipefail
+          # Expected label to allow apply actions
+          APPROVAL_LABEL="allow-apply"
+          # Check if label is attached
+          has_label=$(jq -r '.pull_request.labels[].name' "$GITHUB_EVENT_PATH" | grep -Fx "$APPROVAL_LABEL" || true)
+          if [ -n "$has_label" ]; then
+            echo "Approval label present: $APPROVAL_LABEL"
+            exit 0
+          fi
+          # Scan PR body and diff for '--apply' usage
+          pr_body=$(jq -r .pull_request.body "$GITHUB_EVENT_PATH")
+          found=0
+          if echo "$pr_body" | grep -q -- "--apply"; then
+            found=1
+          fi
+          # Compute diff against base
+          BASE_REF=$(jq -r .pull_request.base.ref "$GITHUB_EVENT_PATH")
+          git fetch origin "$BASE_REF":"refs/remotes/origin/$BASE_REF" --depth=1
+          if git diff --unified=0 "origin/$BASE_REF"...HEAD | grep -q -- "--apply"; then
+            found=1
+          fi
+          if [ "$found" -eq 1 ]; then
+            echo "Detected '--apply' usage but PR lacks '$APPROVAL_LABEL' label."
+            echo "Add the label to proceed or remove '--apply' from changes."
+            exit 1
+          else
+            echo "No apply usage detected or approval label present."
+          fi
