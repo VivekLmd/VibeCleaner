@@ -34,6 +34,13 @@ By default, VibeOps runs in dry-run mode and will not perform external or destru
 
 CI safeguard: PRs that add `--apply` usage must include the `approved` label or the phase-gate workflow will fail.
 
+## Sci‑Fi Portal (Animated UI)
+- Launch a local animated UI showing “robots” carrying files while runs progress:
+  - `vibeops portal --port 8765`
+  - Open `http://127.0.0.1:8765` in your browser
+  - Enable `--trace` on your commands to stream live events to the portal
+- Sound: click “Enable Sound” in the portal to play subtle servo blips (uses WebAudio; muted by default).
+
 ## License
 - Licensed under the MIT License. See the `LICENSE` file for details. The software is provided “AS IS”, without warranty of any kind.
 

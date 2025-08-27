@@ -8,6 +8,7 @@ from . import providers
 from . import telemetry
 from . import report as report_mod
 from .otel_export import export_run_to_otel
+from .portal import serve as serve_portal
 
 BASE = Path(__file__).resolve().parent
 STATE_DIR = get_default_state_dir()
@@ -275,6 +276,12 @@ def main(argv=None):
     sp.add_argument("--latest-count", type=int, default=5, help="If --runs omitted, take N latest (default 5)")
     sp.add_argument("--out", help="Output directory (default ./reports)")
     sp.set_defaults(func=cmd_reports_bundle)
+
+    sp = sub.add_parser("portal", help="Launch the sci-fi portal UI on localhost")
+    sp.add_argument("--port", type=int, default=8765)
+    def _portal(args):
+        serve_portal(args.port)
+    sp.set_defaults(func=_portal)
 
     args = p.parse_args(argv)
     if getattr(args, "trace", False):
