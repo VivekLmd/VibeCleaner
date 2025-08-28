@@ -4,7 +4,12 @@
       "Bash(git filter-branch:*)",
       "Bash(git log:*)",
       "Bash(git remote get-url:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Read(C:\\Users\\vgup\\OneDrive - softsensor.ai\\05 Workspace\\Downloads/**)",
+      "Read(C:\\Users\\vgup\\OneDrive - softsensor.ai\\05 Workspace\\Downloads/**)",
+      "Read(C:\\Users\\vgup\\OneDrive - softsensor.ai\\05 Workspace\\Downloads/**)",
+      "Read(C:\\Users\\vgup\\OneDrive - softsensor.ai\\05 Workspace\\Downloads/**)",
+      "Read(C:\\Users\\vgup\\OneDrive - softsensor.ai\\05 Workspace\\Downloads\\01_Tax_Financial/**)"
     ],
     "deny": [],
     "ask": []
