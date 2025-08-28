@@ -11,6 +11,7 @@ from . import __version__
 from .cleaner import DownloadsCleaner
 from .config import load_config, save_config, get_default_config
 from .scheduler import setup_schedule, remove_schedule
+from .ai_assistant import AICleanerAssistant, InteractiveAssistant
 
 def cmd_init(args):
     """Initialize VibeCleaner with default configuration."""
@@ -209,6 +210,70 @@ def cmd_config(args):
         else:
             print("No configuration found. Run 'vibecleaner init' first.")
 
+def cmd_ask(args):
+    """Process natural language request with AI assistant."""
+    request = ' '.join(args.request)
+    
+    print(f"🤖 AI Assistant ({args.provider})")
+    print(f"📝 Request: {request}\n")
+    
+    assistant = AICleanerAssistant(provider=args.provider)
+    result = assistant.process_request(request)
+    
+    # Format and display response
+    chat = InteractiveAssistant()
+    response = chat._format_response(result)
+    print(response)
+    
+    if args.apply:
+        print("\n🚀 Applying changes...")
+        config = load_config()
+        downloads_path = Path(config.get('downloads_path', '~/Downloads')).expanduser()
+        cleaner = DownloadsCleaner(downloads_path, dry_run=False)
+        
+        # Execute the suggested actions
+        results = cleaner.clean(
+            organize=True,
+            remove_duplicates='duplicate' in request.lower(),
+            remove_old='old' in request.lower() or 'archive' in request.lower()
+        )
+        
+        print("✅ Changes applied successfully!")
+
+def cmd_chat(args):
+    """Interactive chat mode with AI assistant."""
+    print(f"🤖 VibeCleaner AI Chat ({args.provider})")
+    print("💬 Chat naturally about organizing your downloads")
+    print("📝 Type 'exit' or 'quit' to leave chat mode\n")
+    
+    chat = InteractiveAssistant()
+    chat.assistant.provider = args.provider
+    
+    while True:
+        try:
+            # Get user input
+            user_input = input("You: ").strip()
+            
+            if user_input.lower() in ['exit', 'quit', 'bye']:
+                print("\n👋 Goodbye! Your downloads folder awaits.")
+                break
+            
+            if not user_input:
+                continue
+            
+            # Process with AI
+            print("\nAssistant: ", end="")
+            response = chat.chat(user_input)
+            print(response)
+            print()  # Extra line for readability
+            
+        except KeyboardInterrupt:
+            print("\n\n👋 Chat ended.")
+            break
+        except Exception as e:
+            print(f"\n❌ Error: {e}")
+            print("Let's try again...\n")
+
 def main(argv=None):
     """VibeCleaner entry point."""
     parser = argparse.ArgumentParser(
@@ -258,6 +323,18 @@ def main(argv=None):
     config_parser = subparsers.add_parser('config', help='View or edit configuration')
     config_parser.add_argument('--edit', action='store_true', help='Open config in editor')
     
+    # AI Assistant command
+    ai_parser = subparsers.add_parser('ask', help='Ask AI assistant in natural language')
+    ai_parser.add_argument('request', nargs='+', help='Natural language request')
+    ai_parser.add_argument('--provider', choices=['claude', 'codex'], default='claude', 
+                           help='AI provider to use')
+    ai_parser.add_argument('--apply', action='store_true', help='Apply suggested changes')
+    
+    # Interactive chat command
+    chat_parser = subparsers.add_parser('chat', help='Interactive AI chat mode')
+    chat_parser.add_argument('--provider', choices=['claude', 'codex'], default='claude',
+                            help='AI provider to use')
+    
     args = parser.parse_args(argv)
     
     if not args.command:
@@ -272,7 +349,9 @@ def main(argv=None):
         'schedule': cmd_schedule,
         'duplicates': cmd_duplicates,
         'stats': cmd_stats,
-        'config': cmd_config
+        'config': cmd_config,
+        'ask': cmd_ask,
+        'chat': cmd_chat
     }
     
     handler = cmd_map.get(args.command)

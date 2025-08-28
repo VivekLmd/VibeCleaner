@@ -1,8 +1,8 @@
-# VibeCleaner — Smart Downloads Folder Organizer
+# VibeCleaner — AI-Powered Downloads Folder Organizer
 
 ## About
 
-**VibeCleaner** is an intelligent automation tool that keeps your Downloads folder clean and organized. It automatically sorts files, removes clutter, and maintains a tidy file system without manual intervention.
+**VibeCleaner** is an AI-powered automation tool that understands natural language to keep your Downloads folder clean and organized. Simply tell it what you want in plain English - no technical knowledge required! It uses Claude or Codex AI to understand your requests and automatically sorts files, removes clutter, and maintains a tidy file system.
 
 ### 🎯 What VibeCleaner Does
 
@@ -15,6 +15,13 @@ VibeCleaner transforms your chaotic Downloads folder into an organized file syst
 - **Safe Operations**: Dry-run mode shows what will happen before making changes
 
 ### ✨ Key Features
+
+- **🤖 AI-Powered Natural Language Interface**:
+  - Talk to VibeCleaner like a human - no commands to memorize
+  - Understands requests like "organize my downloads" or "delete old stuff"
+  - Works with Claude or Codex AI assistants
+  - Interactive chat mode for conversational cleaning
+  - Smart fallback to rule-based cleaning if AI unavailable
 
 - **File Type Recognition**: Automatically categorizes files by extension and content
   - Documents (PDF, DOCX, TXT, etc.)
@@ -53,6 +60,15 @@ VibeCleaner transforms your chaotic Downloads folder into an organized file syst
 
 ## 🚀 Quick Start
 
+### Prerequisites
+
+- **AI Provider**: Install Claude CLI or Codex CLI for AI features
+  - Claude: `pip install claude-cli` (or your Claude installation method)
+  - Codex: `npm install -g codex-cli` (or your Codex installation method)
+  - Set environment variables if needed:
+    - `VIBECLEANER_CLAUDE_CMD=claude`
+    - `VIBECLEANER_CODEX_CMD=codex`
+
 ### Installation
 
 ```bash
@@ -65,12 +81,31 @@ cd vibecleaner
 pip install .
 ```
 
-### Basic Usage
+### 🤖 AI-Powered Usage (Recommended for Non-Technical Users)
 
 ```bash
-# Initialize VibeCleaner with default settings
+# Initialize VibeCleaner
 vibecleaner init
 
+# Ask in natural language
+vibecleaner ask "clean up my messy downloads folder"
+vibecleaner ask "find and delete duplicate photos"
+vibecleaner ask "organize PDFs from last month"
+vibecleaner ask "what files are taking up the most space?"
+
+# Interactive chat mode
+vibecleaner chat
+# Then chat naturally:
+# You: my downloads are a mess, help!
+# Assistant: I'll help you organize...
+
+# Apply AI suggestions automatically
+vibecleaner ask "remove old files" --apply
+```
+
+### Manual Usage (Traditional Commands)
+
+```bash
 # Preview what will be cleaned (dry run)
 vibecleaner clean --dry-run
 
@@ -78,7 +113,7 @@ vibecleaner clean --dry-run
 vibecleaner clean
 
 # Clean with specific rules
-vibecleaner clean --older-than 30d --duplicates
+vibecleaner clean --older-than 30 --duplicates
 
 # Watch folder for real-time organization
 vibecleaner watch ~/Downloads

@@ -11,16 +11,19 @@ readme = "README.md"
 license = { file = "LICENSE" }
 dependencies = [
   "PyYAML>=6.0",
-  "platformdirs>=4",
 ]
 classifiers = [
   "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
   "Operating System :: OS Independent",
-  "Intended Audience :: Developers",
-  "Topic :: Software Development :: Build Tools",
+  "Intended Audience :: End Users/Desktop",
+  "Topic :: Desktop Environment :: File Managers",
+  "Topic :: System :: Filesystems",
+  "Topic :: Utilities",
 ]
 
 [project.scripts]
