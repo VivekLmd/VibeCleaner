@@ -1,4 +1,4 @@
-name: vibeops-phase-gate
+name: vibecleaner-phase-gate
 
 on:
   pull_request:
@@ -17,7 +17,7 @@ jobs:
       - name: Run swachh
         run: |
           python -m pip install . || true
-          python -m vibeops.swachh
+          python -m vibecleaner.swachh
       - name: Enforce Mode tag
         run: |
           set -e

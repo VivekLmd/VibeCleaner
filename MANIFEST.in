@@ -1,5 +1,5 @@
 include LICENSE
-recursive-include vibeops/web *
-recursive-include vibeops/templates *
-recursive-include vibeops/config *
-recursive-include vibeops/hooks *
+recursive-include vibecleaner/web *
+recursive-include vibecleaner/templates *
+recursive-include vibecleaner/config *
+recursive-include vibecleaner/hooks *

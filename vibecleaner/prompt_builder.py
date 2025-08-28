@@ -23,7 +23,7 @@ def build_prompt(base_dir: Path, mode: str, ticket_text: str, extra_context: Dic
     rules = (base_dir / "config" / "rules.md").read_text(encoding="utf-8")
     mode_prompt = (prompts_dir / mode_file).read_text(encoding="utf-8")
 
-    header = f"""### VIBEOPS CONTEXT (Do not ignore)
+    header = f"""### VIBECLEANER CONTEXT (Do not ignore)
 - MODE: {mode.upper()}
 - RULES (agents.yaml):
 {system_rules}

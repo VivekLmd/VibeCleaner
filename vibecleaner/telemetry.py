@@ -26,7 +26,7 @@ def _ensure_run_dir(run_id: str) -> Path:
 def start_run(context: Dict[str, Any]) -> Dict[str, Any]:
     run_id = context.get("run_id") or uuid.uuid4().hex[:12]
     run_dir = _ensure_run_dir(run_id)
-    env_trace = os.environ.get("VIBEOPS_TRACE", "0")
+    env_trace = os.environ.get("VIBECLEANER_TRACE", "0")
     context_out = {
         **context,
         "run_id": run_id,
@@ -34,8 +34,8 @@ def start_run(context: Dict[str, Any]) -> Dict[str, Any]:
         "started_at": _now_iso(),
     }
     (run_dir / "run.json").write_text(json.dumps(context_out, indent=2), encoding="utf-8")
-    os.environ.setdefault("VIBEOPS_RUN_ID", run_id)
-    os.environ.setdefault("VIBEOPS_RUN_DIR", str(run_dir))
+    os.environ.setdefault("VIBECLEANER_RUN_ID", run_id)
+    os.environ.setdefault("VIBECLEANER_RUN_DIR", str(run_dir))
     _append_event(run_dir, {
         "ts": _now_iso(),
         "event": "run_start",
@@ -53,16 +53,16 @@ def _append_event(run_dir: Path, payload: Dict[str, Any]):
 
 
 def log_event(event: str, **fields):
-    run_dir = Path(os.environ.get("VIBEOPS_RUN_DIR", runs_base_dir()))
+    run_dir = Path(os.environ.get("VIBECLEANER_RUN_DIR", runs_base_dir()))
     _append_event(run_dir, {"ts": _now_iso(), "event": event, **fields})
 
 
 def record_artifact(name: str, content: str, subdir: Optional[str] = None):
     # Only record artifacts if tracing is enabled
-    trace_on = os.environ.get("VIBEOPS_TRACE", "0") in ("1", "true", "TRUE")
+    trace_on = os.environ.get("VIBECLEANER_TRACE", "0") in ("1", "true", "TRUE")
     if not trace_on:
         return
-    run_dir = Path(os.environ.get("VIBEOPS_RUN_DIR", runs_base_dir()))
+    run_dir = Path(os.environ.get("VIBECLEANER_RUN_DIR", runs_base_dir()))
     if subdir:
         run_dir = run_dir / subdir
     run_dir.mkdir(parents=True, exist_ok=True)
@@ -70,6 +70,6 @@ def record_artifact(name: str, content: str, subdir: Optional[str] = None):
 
 
 def end_run(status: str = "ok", **fields):
-    run_dir = Path(os.environ.get("VIBEOPS_RUN_DIR", runs_base_dir()))
+    run_dir = Path(os.environ.get("VIBECLEANER_RUN_DIR", runs_base_dir()))
     _append_event(run_dir, {"ts": _now_iso(), "event": "run_end", "status": status, **fields})
 

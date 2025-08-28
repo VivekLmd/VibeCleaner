@@ -27,18 +27,18 @@ def export_run_to_otel(run_id: str) -> str:
     run_meta = json.loads((base / "run.json").read_text(encoding="utf-8"))
     events = [json.loads(l) for l in (base / "events.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
 
-    provider = TracerProvider(resource=Resource.create({"service.name": "vibeops"}))
+    provider = TracerProvider(resource=Resource.create({"service.name": "vibecleaner"}))
     span_exporter = OTLPSpanExporter()  # honors OTEL_EXPORTER_OTLP_* env vars
     provider.add_span_processor(BatchSpanProcessor(span_exporter))
     trace.set_tracer_provider(provider)
-    tracer = trace.get_tracer("vibeops")
+    tracer = trace.get_tracer("vibecleaner")
 
-    with tracer.start_as_current_span("vibeops.run", attributes={
+    with tracer.start_as_current_span("vibecleaner.run", attributes={
         "run.id": run_id,
-        "vibeops.cmd": run_meta.get("cmd", ""),
-        "vibeops.mode": run_meta.get("mode", ""),
-        "vibeops.provider": run_meta.get("provider", ""),
-        "vibeops.model": run_meta.get("model", ""),
+        "vibecleaner.cmd": run_meta.get("cmd", ""),
+        "vibecleaner.mode": run_meta.get("mode", ""),
+        "vibecleaner.provider": run_meta.get("provider", ""),
+        "vibecleaner.model": run_meta.get("model", ""),
     }):
         for e in events:
             ev = e.get("event")

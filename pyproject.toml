@@ -3,9 +3,9 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "vibeops"
+name = "vibecleaner"
 version = "0.2.0"
-description = "Practical vibe coding orchestration for Claude + Codex"
+description = "Automated code quality and cleanup bot for development workflows"
 requires-python = ">=3.9"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -24,13 +24,13 @@ classifiers = [
 ]
 
 [project.scripts]
-vibeops = "vibeops.cli:main"
+vibecleaner = "vibecleaner.cli:main"
 
 [tool.setuptools]
 include-package-data = true
 
 [tool.setuptools.package-data]
-vibeops = [
+vibecleaner = [
   "web/*",
   "templates/*",
   "templates/prompts/*",

@@ -1,16 +1,16 @@
 ## Contributing
 
-Thanks for your interest in contributing to VibeOps!
+Thanks for your interest in contributing to VibeCleaner!
 
 ### Getting Started
 - Prereqs: Python 3.10+, Git, and optionally provider CLIs (`claude`, `codex`).
 - Install locally: `pip install -e .`
-- Verify CLI: `vibeops --help`
+- Verify CLI: `vibecleaner --help`
 
 ### Development Workflow
 - Create a branch for your change.
 - Keep PRs small and focused; include a brief rationale and test plan.
-- Run hygiene checks before pushing: `vibeops swachh`
+- Run hygiene checks before pushing: `vibecleaner swachh`
 - If adding commands/features, update `README.md` and `docs/`.
 
 ### Testing

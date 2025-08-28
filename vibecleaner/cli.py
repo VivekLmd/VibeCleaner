@@ -19,7 +19,7 @@ def cmd_init(args):
     state["version"] = __version__
     state["default_mode"] = state.get("default_mode", "mvp")
     save_state(STATE_DIR, state)
-    print(f"VibeOps {__version__} initialized. State at {STATE_DIR}")
+    print(f"VibeCleaner {__version__} initialized. State at {STATE_DIR}")
     print("Tool detection:")
     print_detected_tools()
 
@@ -62,10 +62,10 @@ def cmd_gen(args):
     provider_name = args.provider or _choose_provider(args.mode, BASE / "config" / "router.yaml")
     out = getattr(providers, provider_name)(prompt, model=args.model)
     out_dir = Path(args.out)
-    if os.environ.get("VIBEOPS_APPLY"):
+    if os.environ.get("VIBECLEANER_APPLY"):
         out_dir.mkdir(parents=True, exist_ok=True)
         # Safe mode: block writing into a non-empty directory unless --force
-        if os.environ.get("VIBEOPS_SAFE"):
+        if os.environ.get("VIBECLEANER_SAFE"):
             try:
                 any_existing = any(out_dir.iterdir())
             except Exception:
@@ -120,7 +120,7 @@ def cmd_labels(args):
             for l in issue.get("labels",[]): all_labels.add(l)
             mode = issue.get("mode")
             if mode: all_labels.add(f"mode:{mode}")
-    if os.environ.get("VIBEOPS_SAFE") or not os.environ.get("VIBEOPS_APPLY"):
+    if os.environ.get("VIBECLEANER_SAFE") or not os.environ.get("VIBECLEANER_APPLY"):
         print(f"[dryrun][labels] Would ensure labels in {repo}: {sorted(all_labels)}")
         return
     ensure_labels(repo, sorted(all_labels))
@@ -135,9 +135,9 @@ def _issue_body_from(epic, issue):
 
 def cmd_issues(args):
     # Default dry-run; enable apply via global or local flag
-    if os.environ.get("VIBEOPS_SAFE"):
+    if os.environ.get("VIBECLEANER_SAFE"):
         args.dryrun = True
-    if os.environ.get("VIBEOPS_APPLY"):
+    if os.environ.get("VIBECLEANER_APPLY"):
         args.dryrun = False
     try:
         import yaml
@@ -215,7 +215,7 @@ def cmd_reports_bundle(args):
 
 
 def main(argv=None):
-    p = argparse.ArgumentParser("vibeops", description="Vibe coding orchestrator for Claude + Codex")
+    p = argparse.ArgumentParser("vibecleaner", description="Automated code quality and cleanup bot")
     p.add_argument("--trace", action="store_true", help="Enable visibility trail for this run")
     p.add_argument("--safe", action="store_true", help="Enable safety guardrails (dry-run where possible; block risky writes)")
     p.add_argument("--apply", action="store_true", help="Apply changes (by default, commands run in dry-run mode). Shows a caution warning.")
@@ -285,12 +285,12 @@ def main(argv=None):
 
     args = p.parse_args(argv)
     if getattr(args, "trace", False):
-        os.environ["VIBEOPS_TRACE"] = "1"
+        os.environ["VIBECLEANER_TRACE"] = "1"
     if getattr(args, "safe", False):
-        os.environ["VIBEOPS_SAFE"] = "1"
+        os.environ["VIBECLEANER_SAFE"] = "1"
     # Apply mode is opt-in; default is dry-run
     if getattr(args, "apply", False):
-        os.environ["VIBEOPS_APPLY"] = "1"
+        os.environ["VIBECLEANER_APPLY"] = "1"
         print("CAUTION: APPLY MODE ENABLED. This will perform write/external actions.")
         print("Proceeding in 3... 2... 1...")
     if not hasattr(args, "func"):

@@ -10,7 +10,7 @@ Agentic tooling can be powerful but risky. Keep these cautions in mind:
 
 ### Built-in Mitigations
 - Dry-run by default: commands only print intended actions unless `--apply` is set.
-- Safe mode: add `--safe` (or `VIBEOPS_SAFE=1`) to enforce guardrails:
+- Safe mode: add `--safe` (or `VIBECLEANER_SAFE=1`) to enforce guardrails:
   - Forces dry-run for `issues` and skips `labels` changes.
   - Blocks writing generated output into non-empty directories unless `--force` is passed.
 - Dry-run defaults: `issues` defaults to `--dryrun`; use `--apply` to execute.

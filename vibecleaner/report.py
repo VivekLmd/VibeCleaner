@@ -98,12 +98,12 @@ def generate_html_report(run_id: str, out_path: Path) -> Path:
     <html>
     <head>
       <meta charset="utf-8" />
-      <title>VibeOps Report - {esc(run_id)}</title>
+      <title>VibeCleaner Report - {esc(run_id)}</title>
       <style>{styles}</style>
     </head>
     <body>
       <header>
-        <h1>VibeOps Run Report</h1>
+        <h1>VibeCleaner Run Report</h1>
         <div class=small>run_id: {esc(run_id)}</div>
       </header>
       {section('Metadata', f'<div class=kv>{meta_items}</div>')}
@@ -130,10 +130,10 @@ def bundle_reports(run_ids: list[str], out_dir: Path) -> Path:
     index = f"""
     <!doctype html>
     <html>
-    <head><meta charset='utf-8'><title>VibeOps Reports</title>
+    <head><meta charset='utf-8'><title>VibeCleaner Reports</title>
     <style>body{{font-family:system-ui;margin:2rem}} li{{margin:.25rem 0}}</style></head>
     <body>
-      <h1>VibeOps Reports</h1>
+      <h1>VibeCleaner Reports</h1>
       <ul>{links}</ul>
     </body>
     </html>

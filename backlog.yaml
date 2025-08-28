@@ -1,7 +1,7 @@
 # Simple backlog format: epics with nested issues
 repo: ""   # e.g., owner/repo
 project: ""  # optional GitHub project name/URL
-labels_default: ["ai-generated", "vibeops"]
+labels_default: ["ai-generated", "vibecleaner"]
 epics:
   - key: DISC
     title: "Discovery: Feasibility of Core Tech"

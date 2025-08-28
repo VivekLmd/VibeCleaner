@@ -29,16 +29,16 @@ def _user_config_base() -> Path:
     try:
         # Prefer platformdirs if available
         from platformdirs import user_config_path
-        return Path(user_config_path("vibeops"))
+        return Path(user_config_path("vibecleaner"))
     except Exception:
         # Cross-platform fallback
         if os.name == "nt":
             base = os.environ.get("APPDATA") or os.path.expanduser("~\\AppData\\Roaming")
-            return Path(base) / "vibeops"
+            return Path(base) / "vibecleaner"
         # POSIX
         base = os.environ.get("XDG_CONFIG_HOME", str(Path.home() / ".config"))
         return Path(base) / "vibeops"
 
 def get_default_state_dir() -> Path:
-    """Return a writable per-user state/config directory for VibeOps."""
+    """Return a writable per-user state/config directory for VibeCleaner."""
     return _user_config_base()
