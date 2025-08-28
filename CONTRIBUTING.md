@@ -36,6 +36,14 @@ Your contributions can help solve these fundamental challenges.
 - Create provider abstraction layer
 - Document provider-specific quirks
 
+### 4. Cross-Provider Consistency (NEW CHALLENGE)
+Based on our experiments:
+- Claude and Codex approach problems fundamentally differently
+- Codex tends toward ML/academic solutions
+- Claude prefers pragmatic/rule-based approaches
+- Need strategies to harmonize different AI philosophies
+- Research: Can we predict which provider suits which task?
+
 ### 4. Real-World Testing
 - Test on actual messy Downloads folders
 - Document failure cases with reproducible examples
@@ -114,8 +122,7 @@ test: add 1000-file folder test case
 If you write about your experience with VibeCleaner or vibe coding:
 - Share what didn't work (as important as successes)
 - Include metrics and reproducible examples
-- Tag @VivekGu35758557 on Twitter/X
-- Open an issue linking to your post
+- Share via an issue linking to your post (no external handles required)
 
 ### Academic Research
 Using VibeCleaner for research on agentic workflows? We'd love to:
@@ -152,7 +159,7 @@ All contributors will be acknowledged in:
 
 ## Questions?
 
-Open an issue with the "question" label or reach out on Twitter/X: @VivekGu35758557
+Open an issue with the "question" label. For private matters, use the email listed in SECURITY.md.
 
 ---
 
