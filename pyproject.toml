@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vibecleaner"
-version = "0.2.0"
-description = "Automated code quality and cleanup bot for development workflows"
+version = "1.0.0"
+description = "Smart downloads folder organizer that automatically cleans and categorizes files"
 requires-python = ">=3.9"
 readme = "README.md"
 license = { file = "LICENSE" }
